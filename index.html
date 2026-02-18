@@ -1,125 +1,727 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
+  <!-- MetaInformation about the website -->
   <meta name="google-site-verification" content="IahkSwYLeJ2I8NNSboy635jaJG-2nu9P0pr80s_4cmw" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Davide Salzano – About me</title>
-  <link rel="icon" type="image/svg+xml" href="./DS_Logo_Dark.png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Davide Salzano, researcher in automatic control. Modelling, analysis and control of large-scale complex systems.">
+  <link rel="icon" type="image/png" href="./DS_Logo_Dark.png">
+
+  <title>Davide Salzano</title>
+
+  <!-- Font & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Custom Styling of the website -->
+  <style>
+    /* Definition of styling variables */
+    :root{
+      --bg-1: #071026;
+      --bg-2: #0f1720;
+      --accent: #6ee7b7;
+      --muted: #98a0ad;
+      --glass: rgba(255,255,255,0.04);
+      --card: rgba(255,255,255,0.03);
+      --text-color : rgba(255,255,255,0.75);
+      --text-accent: #ffffff;
+    }
+    html,body{height:100%}
+
+    /* ------------- Base styles --------------- */
+    
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg-1);
+      color: #e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* ------------ Canvas background fits viewport ----------------- */
+
+    #bgCanvas{
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    
+    /* --------------- Navbar Sryling ----------------- */
+
+    .navbar{
+      z-index: 30;
+      background: var(--bg-2);   /* stronger background */
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass);
+    }
+    .navbar .nav-link{
+      color: var(--text-color);
+      font-weight: 600;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .navbar .nav-link:hover{
+      color: var(--text-accent);
+    }
+    .navbar .nav-link::after{
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+    .navbar .nav-link:hover::after{
+      width: 100%;
+    }
+    .navbar .nav-link.active{
+      color: var(--text-accent);
+    }
+    .navbar .nav-link.active::after{
+      width: 100%;
+    }
+    .navbar-brand{ 
+      color:var(--accent) !important;
+      font-weight:700; 
+    }
+
+    /* -------------- Settings for the Hero Section ---------------- */
+    .hero{
+      position:relative;
+      padding:6.5rem 0 4.5rem;
+      min-height:72vh;
+      display:flex;
+      align-items:center;
+      z-index:2;
+    }
+    .hero .hero-left{ max-width:62%; }
+    .hero h1{ font-size: clamp(2rem, 3.8vw, 3.4rem); line-height:1; margin-bottom:.4rem; font-weight:800; letter-spacing:-0.6px;}
+    .hero p.lead{ color:var(--muted); font-size:1.05rem; margin-bottom:1rem; }
+
+    /* ----------------- Typing effect style ------------------------- */
+    .tagline{ 
+      font-weight:600;
+      color: #dffcf0; 
+      display:inline-block; }
+    .tagline .word{ 
+      color:var(--accent); 
+    }
+
+    /* ---------------- Profile Card Styling ------------------------------ */
+    .profile-card{
+      width:240px; height:240px; border-radius:50%;
+      display:grid; place-items:center; overflow:hidden;
+      margin:0 auto;
+      box-shadow: 0 12px 40px var(--bg-2);
+      background: linear-gradient(135deg, var(--bg-2), var(--bg-1));
+      border:6px solid rgba(255,255,255,0.03);
+      transform-style: preserve-3d;
+      transition: transform 300ms cubic-bezier(.2,.9,.2,1), box-shadow 300ms;
+      will-change: transform;
+    }
+    .profile-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .profile-wrap-outer{ display:flex; align-items:center; justify-content:center; height:100%; }
+
+    /* ---------------- glowing effect Button ----------------------------- */
+    
+    .btn-cta{
+      border-radius:999px;
+      padding: .55rem 1.05rem;
+      font-weight:700;
+      background: linear-gradient(90deg, rgba(110,231,183,0.12), rgba(110,231,183,0.06));
+      border: 1px solid rgba(110,231,183,0.12);
+      color: #dffcf0;
+      box-shadow: 0 8px 30px rgba(110,231,183,0.06);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .btn-cta:hover{ transform: translateY(-3px); box-shadow: 0 18px 40px rgba(110,231,183,0.12); }
+
+    /* ---------------- about cards -------------------------- */
+    .about-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
+      padding:1.6rem;
+      border-radius:12px;
+      transition: transform .45s cubic-bezier(.2,.9,.2,1), opacity .45s;
+      transform: translateY(18px);
+      opacity:0;
+    }
+    .inview{ transform:none; opacity:1; }
+
+    /* ----------------- small badge chips ------------------ */
+    .chip{ 
+      display:inline-block;
+      padding:.35rem .6rem; 
+      border-radius:999px; 
+      margin-right:.45rem; 
+      background:var(--glass); 
+      color:var(--muted); 
+      font-weight:600; 
+      font-size:.9rem; 
+      border:1px solid rgba(255,255,255,0.02); }
+
+    /* ----------------- Footer Styling --------------------- */
+    footer{ 
+      color:var(--muted); 
+      padding:2rem 0 3rem; 
+      border-top:1px solid rgba(255,255,255,0.02); 
+    }
+
+    /* ------------------ Responsive Positioning of the Cover image -------------------- */
+    @media (max-width:991px){
+      .hero .hero-left{ max-width:100%;}
+      .profile-card{ width:180px; height:180px; }
+    }
+
+    /* accessible focus */
+    a:focus, button:focus { outline: 3px solid rgba(110,231,183,0.12); outline-offset:4px; }
+
+
+    /* ---------- Scoped styles for .ds-graph-section ---------- */
+    .ds-graph-section { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
+    .ds-graph-inner {
+      margin: 0 auto;
+      border-radius:12px;
+      padding:18px;
+      background: var(--bg-1);
+      box-shadow: none;
+    }
+    .ds-graph-header { margin-bottom:8px; }
+    .ds-graph-title { margin:0; font-size:18px; color:#e6eef8; }
+    .ds-graph-sub { margin:0; font-size:13px; color:#9aa8bf; }
+
+    .ds-graph-area {
+      width:100%;
+      height:340px; /* adjust height as needed */
+      border-radius:10px;
+      overflow:hidden;
+      background: var(--bg-1);
+      padding:10px;
+      box-sizing:border-box;
+    }
+
+    /* SVG children */
+    .ds-graph-area svg { width:100%; height:100%; display:block; }
+    .ds-graph-area .link { stroke: rgba(156, 208, 180, 0.604); stroke-width:3.1; transition: opacity 320ms, stroke-width 220ms; }
+    .ds-graph-area .spoke { stroke: rgba(124,58,237,0.28); stroke-width:2; stroke-linecap:round; transition: opacity 320ms; opacity:0; }
+
+    /* Node groups use transform for motion & scaling — animate transform smoothly */
+    .ds-graph-area .node-group {
+      cursor:pointer;
+      transform-origin: 0 0; /* we transform the whole group; group's local origin is 0,0 */
+      transition: transform 680ms cubic-bezier(.18,.9,.32,1), opacity 360ms ease;
+      will-change: transform, opacity;
+    }
+
+    .ds-graph-area .node-circle {
+      fill: none; /* IMPORTANT: don't cover the image */
+      stroke: rgba(255,255,255,0.10);
+      stroke-width: 1.6;
+      filter: drop-shadow(0 12px 32px rgba(2,6,23,0.55));
+      transition: stroke 220ms;
+    }
+
+
+    /* image fade */
+    .ds-graph-area .node-image { opacity:1; transition: opacity 520ms cubic-bezier(.2,.9,.3,1); transform-origin: 0 0; }
+
+    .ds-graph-area .node-group.inactive-label .node-label { opacity:1; } /* small nodes keep label visible */
+
+    /* action states applied by JS */
+    .ds-graph-area .node-group.dimmed { opacity:0.18; }
+    .ds-graph-area .node-group.active { z-index:30; }
+    .ds-graph-area .node-group.active .node-image { opacity:1; }
+    .ds-graph-area .node-group.hovered { transform: scale(1.06); }
+
+    /* label style when node is active (centered & larger) */
+    .ds-graph-area .node-label {
+      font-size:35px;     /* keep modest */
+      font-weight:500;
+      fill:white;
+      text-anchor:middle;
+      pointer-events:none;
+      opacity:0.95;
+      transition: opacity 300ms ease;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.6);
+    }
+    /* small screens */
+    @media (max-width:720px) {
+      .ds-graph-area { height:420px; }
+      .ds-graph-title { font-size:16px; }
+      .ds-graph-area .node-group { transition-duration: 520ms; }
+    }
+
+  </style>
+
 
 </head>
+
+
 <body>
 
-  
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-  <div class="container-fluid">
-    <img src="./DS_Logo.png" alt="Logo" height="35" class="d-inline-block align-text-top pe-lg-2">
-    <a class="navbar-brand" href="./index.html">Davide Salzano</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="./index.html">
+      <img src="./DS_Logo.png" alt="DS logo" height="34" class="me-2">
+      Davide Salzano
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="./research.html">Research</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./publications.html">Publications</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./contacts.html">Contacts</a>
-        </li>
+
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link active" href="./index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="./research.html">Research</a></li>
+        <li class="nav-item"><a class="nav-link" href="./publications.html">Publications</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
-<main>
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-7 hero-left">
+        <h1>Hi, I’m <span style="color:var(--accent)">Davide Salzano</span></h1>
+        <p class="lead">Researcher in automatic control at the University of Naples Federico II.</p>
+        <p class="tagline">I work on <span id="rotatingWords" class="word word-1"></span></p>
 
-<div class="container-fluid col-xxl-12 px-4 py-5" style="background-image: url('./Complex_net_Bg.png'); background-size: cover; background-position: center;">
-  <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-    <div class="col-2 ">
-    </div>
-    <div class="col-8 col-sm-8 col-lg-4">
-      <img src="DS_round.png" class="d-block mx-lg-auto img-fluid" alt="Davide Salzano profile picture" height="2" loading="lazy">
-    </div>
-    <div class="col-lg-4">
-      <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Hi, I am Davide</h1>
-      <p class="lead">
-        Researcher in automatic control at the University of Naples Federico II.
-      </p>
-    </div>
-    <div class="col-2 ">
-    </div>
-  </div>
-</div>
+        <div class="mt-3 d-flex gap-2 flex-wrap">
+          <a href="./research.html" class="btn btn-cta">Explore Research</a>
+          <a href="./publications.html" class="btn btn-outline-light">Publications</a>
+          <a class="btn btn-link text-decoration-none align-self-center ms-1" href="mailto:davide.salzano@unina.it"><i class="bi bi-envelope-fill"></i> Email</a>
+        </div>
+      </div>
 
-
-<div class="container me-md-1 my-5">
-  <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 shadow-lg">
-    <div class="col-lg-12 p-3 p-lg-5 pt-lg-3">
-      <h1 class="display-4 fw-bold lh-1 text-body-emphasis">About Me</h1>
-      <br/>
-      <p class="lead">
-        I am a researcher at the university of Naples Federico II. I was awarded a dual award PhD title in 2022 from the University of Naples Federico II and the University of Bristol and I have been post-doc at the University of Naples Federico II and at the Scuola Superiore Meridionale.
-      </p>
-      <p class="lead">
-        My research focuses on the modeling, analysis and control of large-scale complex systems.
-        Specifically, I am interested in how to model, analyse and coordinate these systems to achieve desired collective behaviours.
-        Do you want to know more about my research? <a href="./research.html">Click here</a> to read more about the topics I am interested in or <a href="./publications.html">here</a> to see a list of my publications.
-      </p>
-    </div>
-    <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-      <img class="rounded-lg-3" src="bootstrap-docs.png" alt="" width="720">
+      <div class="col-lg-5 text-center">
+        <div class="profile-wrap-outer">
+            <div class="profile-card" id="profileCard" role="img" aria-label="Portrait of Davide Salzano">
+            <img src="./DS_round.png" alt="Portrait of Davide Salzano" loading="lazy" width="480" height="480">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- About Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-8">
+        <div class="about-card" data-inview>
+          <h2 class="h4">About me</h2>
+          <p>I am a researcher at the University of Naples Federico II. I earned a dual-award PhD in 2022 from the University of Naples Federico II and the University of Bristol and have held post-doc roles at Unina and Scuola Superiore Meridionale.</p>
+          <p>My work focuses on modelling, analysis and control of large-scale complex systems: networked control, coordination of distributed agents, and emergent collective behaviours. <a href="./research.html">Learn more →</a></p>
+        </div>
+
+        <div class="mt-3 about-card" data-inview>
+          <h3 class="h6 mb-2">Research Keywords</h3>
+          <div class="d-flex flex-wrap">
+            <span class="chip">Cybergenetics</span>
+            <span class="chip">Multi-agent systems</span>
+            <span class="chip">Complex systems</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 text-center text-lg-end">
+        <!-- ===== Smooth animated Research Graph Section (drop into your page) ===== -->
+        <section class="ds-graph-section" aria-label="Research topics graph">
+          <div class="ds-graph-inner">
+            <div id="ds-graph-area" class="ds-graph-area" tabindex="0" aria-hidden="false">
+              <svg id="ds-graph-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" role="img"></svg>
+            </div>
+          </div>
+
+          <script>
+          (function(){
+            // Namespaced variables so this won't conflict with other scripts
+            const svg = document.getElementById('ds-graph-svg');
+            const graphArea = document.getElementById('ds-graph-area');
+
+            const W = 1000, H = 700;
+            const centerX = W/2, centerY = H/2;
+            const layoutRadius = Math.min(W,H) * 0.36;
+            const outerRadius = layoutRadius * 1.15;
+            const baseR = 70;
+            const activeNodeRadius = 200;
+
+            // ===== Description of the nodes of the graph =====
+            const topics = [
+              { id:'t1', name:'Multicellular control', img:'Multicellular_shaded.png', page:'publications_multicelluar_Control' },
+              { id:'t2', name:'Composition control', img:'Consortium_shaded.png', page:'publications_composition_control' },
+              { id:'t3', name:'Control across scales', img:'Complex_nets_Shaded.png', page:'publications_complex_sys' },
+            ];
+            // ============================================================
+
+            const ns = 'http://www.w3.org/2000/svg';
+            const defs = document.createElementNS(ns, 'defs'); svg.appendChild(defs);
+            const linksG = document.createElementNS(ns, 'g'); linksG.setAttribute('aria-hidden','true'); svg.appendChild(linksG);
+            const spokesG = document.createElementNS(ns, 'g'); spokesG.setAttribute('aria-hidden','true'); svg.appendChild(spokesG);
+            const nodesG = document.createElementNS(ns, 'g'); svg.appendChild(nodesG);
+
+            const N = topics.length;
+            // compute neutral positions (for groups' translate)
+            topics.forEach((t,i)=>{
+              const ang = (i/N) * Math.PI * 2 - Math.PI/2;
+              t.neutralX = centerX + Math.cos(ang) * layoutRadius;
+              t.neutralY = centerY + Math.sin(ang) * layoutRadius;
+              t.angle = ang;
+              t.r = baseR;
+            });
+
+            // build all-to-all links
+            // We'll store endpoints in terms of the neutral positions (used when resetting)
+            const neutralLines = [];
+            for (let i=0;i<N;i++){
+              for (let j=i+1;j<N;j++){
+                const a = topics[i], b = topics[j];
+                const line = document.createElementNS(ns,'line');
+                line.classList.add('link');
+                line.setAttribute('x1', a.neutralX); line.setAttribute('y1', a.neutralY);
+                line.setAttribute('x2', b.neutralX); line.setAttribute('y2', b.neutralY);
+                linksG.appendChild(line);
+                neutralLines.push({line,a,b});
+              }
+            }
+
+            // create nodes as groups placed at neutral positions using transform
+            topics.forEach((t,i)=>{
+              // clipPath centered at 0,0 (local group coordinates)
+              const clip = document.createElementNS(ns,'clipPath'); clip.setAttribute('id', `ds-clip-${t.id}`);
+              const cc = document.createElementNS(ns,'circle'); cc.setAttribute('cx', 0); cc.setAttribute('cy', 0); cc.setAttribute('r', t.r);
+              clip.appendChild(cc); defs.appendChild(clip);
+
+              // group positioned at neutral pos via transform translate(x,y)
+              const g = document.createElementNS(ns,'g');
+              g.classList.add('node-group'); g.setAttribute('data-id', t.id);
+              // initial transform: translate to neutral pos (no scale)
+              g.setAttribute('transform', `translate(${t.neutralX},${t.neutralY}) scale(1)`);
+              g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-label', t.name);
+
+              // image placed centered on 0,0 inside group
+              const img = document.createElementNS(ns,'image');
+              img.setAttribute('href', t.img);
+              const imgSize = t.r * 2.4;
+              img.setAttribute('width', imgSize); img.setAttribute('height', imgSize);
+              img.setAttribute('x', -imgSize/2); img.setAttribute('y', -imgSize/2);
+              img.setAttribute('preserveAspectRatio','xMidYMid slice');
+              img.setAttribute('clip-path', `url(#ds-clip-${t.id})`);
+              img.classList.add('node-image');
+
+              // circle rim at 0,0
+              const circle = document.createElementNS(ns,'circle');
+              circle.classList.add('node-circle');
+              circle.setAttribute('cx', 0); circle.setAttribute('cy', 0); circle.setAttribute('r', t.r);
+              circle.setAttribute('fill', '#061121');
+
+              // small inner dot
+              const inner = document.createElementNS(ns,'circle');
+              inner.setAttribute('cx', 0); inner.setAttribute('cy', 0); inner.setAttribute('r', Math.max(6, t.r*0.22));
+              inner.setAttribute('fill', 'rgba(255,255,255,0)');
+
+              // label at local coords below node by default
+              const label = document.createElementNS(ns,'text');
+              label.classList.add('node-label');
+              label.setAttribute('x', 0); label.setAttribute('y', t.r + 20);
+              label.textContent = t.name;
+
+              g.appendChild(img); g.appendChild(circle); g.appendChild(inner); g.appendChild(label);
+              nodesG.appendChild(g);
+
+              // refs
+              t.group = g; t.clip = cc; t.circle = circle; t.img = img; t.label = label;
+
+              // interactions: hover -> activate; focus -> activate; mouseleave on whole area resets
+              g.addEventListener('mouseenter', () => setActive(t.id));
+              g.addEventListener('focus', () => setActive(t.id));
+              g.addEventListener('click', () => gotopage(t.page));
+              g.addEventListener('mouseleave', () => {
+                // small delay to allow quick moves between nodes
+                setTimeout(()=> {
+                  if (!graphArea.matches(':hover') && document.activeElement !== g) setActive(null);
+                }, 60);
+              });
+              g.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Enter' || ev.key === ' ') {
+                  ev.preventDefault(); setActive(t.id);
+                }
+              });
+            });
+
+            // spokes: lines from center to peripherals (we animate opacity and endpoints)
+            topics.forEach(t=>{
+              const s = document.createElementNS(ns,'line');
+              s.classList.add('spoke');
+              // default endpoints equal neutral position -> invisible initially
+              s.setAttribute('x1', centerX); s.setAttribute('y1', centerY);
+              s.setAttribute('x2', t.neutralX); s.setAttribute('y2', t.neutralY);
+              spokesG.appendChild(s);
+              t.spoke = s;
+            });
+
+            // state
+            let activeId = null;
+
+            // reset to neutral: move groups back to neutral transforms and reset visuals
+            function resetLayout() {
+              topics.forEach(t=>{
+                t.group.classList.remove('active','dimmed');
+                // translate to neutral and scale 1
+                t.group.setAttribute('transform', `translate(${t.neutralX},${t.neutralY}) scale(1)`);
+                // ensure clip radius and circle radius are base
+                t.clip.setAttribute('r', t.r);
+                t.circle.setAttribute('r', t.r);
+                // label default (below)
+                t.label.setAttribute('x', 0); t.label.setAttribute('y', t.r + 20);
+                // hide spokes
+                if (t.spoke) t.spoke.style.opacity = 0;
+              });
+
+              // restore neutral link coordinates & opacity
+              neutralLines.forEach(obj=>{
+                obj.line.setAttribute('x1', obj.a.neutralX);
+                obj.line.setAttribute('y1', obj.a.neutralY);
+                obj.line.setAttribute('x2', obj.b.neutralX);
+                obj.line.setAttribute('y2', obj.b.neutralY);
+                obj.line.style.opacity = 1;
+                obj.line.setAttribute('stroke-width', 1.1);
+              });
+            }
 
 
+            function gotopage(page){
+              window.location.href = `./${page}.html`;
+            }
 
+            // setActive uses group transforms to produce smooth movement + scaling
+            function setActive(id) {
+              if (activeId === id) return;
+              activeId = id;
+              if (!id) { resetLayout(); return; }
 
+              // dim others and mark active
+              topics.forEach(t=>{
+                if (t.id === id) { t.group.classList.remove('dimmed'); t.group.classList.add('active'); }
+                else { t.group.classList.add('dimmed'); t.group.classList.remove('active'); }
+              });
 
+              // fade neutral links
+              neutralLines.forEach(obj=>{
+                obj.line.style.opacity = 0.06;
+                obj.line.setAttribute('stroke-width', 0.8);
+              });
 
-<div class="mt-5"></div>
+              // compute a uniform scale factor so active appears as activeNodeRadius
+              const scaleFactor = activeNodeRadius / baseR;
 
-<div class="mt-5"></div>
+              topics.forEach((t,i)=>{
+                if (t.id === id) {
+                  // move group to center and scale up
+                  t.group.setAttribute('transform', `translate(${centerX},${centerY}) scale(${scaleFactor})`);
+                  // enlarge clip & circle radius visually (they scale with group, but increase clip to keep crisp)
+                  t.clip.setAttribute('r', baseR); // clip stays at local circle radius; we rely on group scale
+                  t.circle.setAttribute('r', baseR);
+                  // center label inside the node: local coords (0,0) with transform handling size
+                  t.label.setAttribute('x', 0); t.label.setAttribute('y', 0);
+                } else {
+                  // move peripheral nodes outward along their angle to outerRadius ring (no extra scale)
+                  const tx = centerX + Math.cos(t.angle) * outerRadius;
+                  const ty = centerY + Math.sin(t.angle) * outerRadius;
+                  // group translate to tx,ty and keep scale 1 (they're visually smaller due to dim)
+                  t.group.setAttribute('transform', `translate(${tx},${ty}) scale(1)`);
+                  // keep clip & circle base radius
+                  t.clip.setAttribute('r', t.r);
+                  t.circle.setAttribute('r', t.r);
+                  // label below small node
+                  t.label.setAttribute('x', 0); t.label.setAttribute('y', t.r + 18);
 
+                  // update spoke endpoints (x2,y2)
+                  if (t.spoke) {
+                    t.spoke.setAttribute('x1', centerX);
+                    t.spoke.setAttribute('y1', centerY);
+                    t.spoke.setAttribute('x2', tx);
+                    t.spoke.setAttribute('y2', ty);
+                    t.spoke.style.opacity = 1;
+                  }
+                }
+              });
+            }
 
+    // when mouse leaves entire graph area -> reset
+    graphArea.addEventListener('mouseleave', () => { setActive(null); });
 
+    // esc to clear
+    document.addEventListener('keydown', (ev)=> { if (ev.key === 'Escape') setActive(null); });
 
+    // initial
+    resetLayout();
 
-<div class="container">
-  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-    <div class="col-md-4 d-flex align-items-center">
-      <p class="lead"> <b>Email:</b> <a href="mailto:davide.salzano@unina.it">davide.salzano@unina.it</a></p>
+    // expose for debug
+    window.DS_GRAPH = {topics, setActive};
+  })();
+  </script>
+</section>
+<!-- ===== end smooth research graph section ===== -->
+
+      </div>
     </div>
-    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-      <li class="ms-3">
-        <a class="text-body-secondary" href="https://scholar.google.com/citations?user=1Epzj84AAAAJ&hl=it&oi=ao" aria-label="Google Scholar" target="_blank">
-          <img src="Google_Scholar_logo.png" alt="Google Scholar" width="25" height="25">
-        </a>
-      </li>
-      <li class="ms-3">
-        <a class="text-body-secondary" href="https://www.linkedin.com/in/davide-salzano/" aria-label="LinkedIn" target="_blank">
-          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25 " fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
-            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
-          </svg>
-        </a>
-      </li>
-      <li class="ms-3">
-        <a class="text-body-secondary" href="https://x.com/DavideSalzano94" aria-label="X" target="_blank">
-          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
-            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
-          </svg>
-        </a>
-      </li>
-    </ul>
-  </footer>
-</div>
+  </div>
+</section>
 
+<!-- CONTACT & SOCIAL -->
+<section class="py-4 border-top border-light-10">
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <div>
+      <strong>Email</strong>: <a href="mailto:davide.salzano@unina.it">davide.salzano@unina.it</a>
+    </div>
 
+    <div class="mt-3 mt-md-0">
+      <a class="me-3" href="https://scholar.google.com/citations?user=1Epzj84AAAAJ&hl=it&oi=ao" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar">
+        <img src="Google_Scholar_logo.png" width="26" height="26" alt="Google Scholar">
+      </a>
+      <a class="me-3 text-muted" href="https://www.linkedin.com/in/davide-salzano/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="bi bi-linkedin fs-5"></i></a>
+      <a class="text-muted" href="https://x.com/DavideSalzano94" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="bi bi-twitter fs-5"></i></a>
+    </div>
+  </div>
+</section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<!-- FOOTER -->
+<footer>
+  <div class="container text-center text-muted small">
+    <span id="yr"></span> Davide Salzano • University of Naples Federico II
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ---------- 1) rotating words (type/rotate) ---------- */
+(() => {
+  const words = ['complex systems.', 'multi-scale control.', 'cybergenetics.'];
+  const el = document.getElementById('rotatingWords');
+  let idx = 0, pos = 0, forward = true, wait = 800;
+  function tick(){
+    const w = words[idx];
+    if (forward){
+      pos++;
+      el.textContent = w.slice(0,pos);
+      if (pos === w.length){ forward = false; setTimeout(tick, wait); return; }
+    } else {
+      pos--;
+      el.textContent = w.slice(0,pos);
+      if (pos === 0){ forward = true; idx = (idx+1) % words.length; }
+    }
+    setTimeout(tick, forward ? 42 : 24);
+  }
+  tick();
+})();
+
+/* ---------- 2) small parallax / tilt on profile card ---------- */
+(() => {
+  const card = document.getElementById('profileCard');
+  if (!card) return;
+  function onMove(e){
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateX(${ -y * 6 }deg) rotateY(${ x * 8 }deg) translateZ(8px)`;
+  }
+  function reset(){ card.style.transform = ''; }
+  card.addEventListener('pointermove', onMove);
+  card.addEventListener('pointerleave', reset);
+  // subtle 3D on touchmove fallback
+  card.addEventListener('touchmove', (ev)=> onMove(ev.touches[0]) , {passive:true});
+})();
+
+/* ---------- 3) scroll reveal for elements with [data-inview] ---------- */
+(() => {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('inview'); obs.unobserve(e.target); }
+    });
+  }, {threshold: 0.15});
+  document.querySelectorAll('[data-inview]').forEach(el => obs.observe(el));
+})();
+
+/* ---------- 4) floating particle network on canvas (lightweight) ---------- */
+(() => {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let w = canvas.width = innerWidth;
+  let h = canvas.height = innerHeight;
+  const opts = { count: Math.max(20, Math.round((w*h)/90000)), maxConn: 2, speed: 0.25, radius: 1.8 };
+
+  window.addEventListener('resize', ()=>{ w = canvas.width = innerWidth; h = canvas.height = innerHeight; init(); });
+
+  let points = [];
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+
+  function init(){
+    points = [];
+    for (let i=0;i<opts.count;i++){
+      points.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        vx: (Math.random()-0.5)*opts.speed,
+        vy: (Math.random()-0.5)*opts.speed,
+      });
+    }
+  }
+
+  function step(){
+    ctx.clearRect(0,0,w,h);
+    // draw connections
+    for (let i=0;i<points.length;i++){
+      const p = points[i];
+      // move
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > w) p.vx *= -1;
+      if (p.y < 0 || p.y > h) p.vy *= -1;
+      // draw point
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      ctx.arc(p.x, p.y, opts.radius, 0, Math.PI*2);
+      ctx.fill();
+
+      // connections
+      let k = 0;
+      for (let j = i+1; j<points.length && k < opts.maxConn; j++){
+        const q = points[j];
+        const dx = p.x - q.x, dy = p.y - q.y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 150){
+          const alpha = 0.08 * (1 - d/150);
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(110,231,183,'+alpha+')';
+          ctx.lineWidth = 1;
+          ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
+          k++;
+        }
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  init();
+  step();
+})();
+
+/* ---------- utils: current year ---------- */
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>

@@ -1,203 +1,381 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Davide Salzano – Publications</title>
   <link rel="icon" type="image/svg+xml" href="./DS_Logo_Dark.png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
+  <!-- Inter font, Bootstrap, and icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-1:#071026;
+      --bg-2:#0f1720;
+      --accent:#6ee7b7;
+      --muted:#98a0ad;
+      --glass: rgba(255,255,255,0.03);
+      --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#e6eef6;
+      /* plain clean background: subtle dark gradient */
+      background: var(--bg-1);;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* NAV */
+    .navbar{
+      z-index: 30;
+      background: rgba(10,15,25,0.75);   /* stronger background */
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* nav links */
+    .navbar .nav-link{
+      color: rgba(255,255,255,0.75);
+      font-weight: 600;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    /* hover effect */
+    .navbar .nav-link:hover{
+      color: #ffffff;
+    }
+
+    /* animated underline */
+    .navbar .nav-link::after{
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+
+    .navbar .nav-link:hover::after{
+      width: 100%;
+    }
+
+    /* active page link */
+    .navbar .nav-link.active{
+      color: #ffffff;
+    }
+
+    .navbar .nav-link.active::after{
+      width: 100%;
+    }
+    .navbar-brand{ color:var(--accent) !important; font-weight:700; }
+
+    /* Page header */
+    .page-head {
+      position: relative;
+      z-index: 2;
+      padding: 5.5rem 0 2.5rem;
+      text-align: center;
+    }
+    .page-head h1 { font-size: clamp(1.6rem, 3.8vw, 2.6rem); font-weight:800; margin-bottom:.4rem; }
+    .page-head p.lead { color:var(--muted); margin-bottom:0.6rem; }
+
+    /* content container */
+    .content {
+      position: relative;
+      z-index: 2;
+      padding-bottom: 4rem;
+    }
+
+    /* Publication list styles */
+    .year-header {
+      font-weight:700;
+      color:#fff;
+      margin-top:1.5rem;
+      margin-bottom:.75rem;
+    }
+    .pub-list { margin-top: 1.2rem; }
+    .pub-card{
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.03);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: .8rem;
+      transition: transform .35s cubic-bezier(.2,.9,.2,1), box-shadow .35s, opacity .45s;
+      transform: translateY(18px);
+      opacity: 0;
+    }
+    .pub-card.inview{ transform:none; opacity:1; }
+    .pub-card:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.65); }
+    .pub-card a { color: #dffcf0; font-weight:600; text-decoration: none; }
+    .pub-meta { color:var(--muted); margin-top:.35rem; font-size:.95rem; }
+
+
+    .pub-meta { color: var(--muted); display:block; margin-top: .35rem; font-size: .95rem; }
+
+    /* section separators */
+    .section-block { margin-top: 1.2rem; margin-bottom:1.6rem; }
+
+    /* small chips / filters (optional) */
+    .chip { display:inline-block; padding:.28rem .55rem; border-radius:999px; margin-right:.5rem; background:var(--glass); color:var(--muted); font-weight:600; font-size:.9rem; }
+
+    /* footer */
+    footer{ z-index:2; position:relative; color:var(--muted); padding:2.5rem 0 3rem; border-top:1px solid rgba(255,255,255,0.02); }
+
+    /* accessible focus */
+    a:focus, button:focus { outline: 3px solid rgba(110,231,183,0.12); outline-offset:4px; }
+
+    @media (max-width:767px){
+      .page-head { padding-top:3.5rem; padding-bottom:1.5rem; }
+      .pub-card { padding:.85rem; }
+    }
+  </style>
 </head>
 <body>
 
-  
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-  <div class="container-fluid">
-    <img src="./DS_Logo.png" alt="Logo" height="35" class="d-inline-block align-text-top pe-lg-2">
-    <a class="navbar-brand" href="./index.html">Davide Salzano</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" >
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="./index.html">
+      <img src="./DS_Logo.png" alt="DS logo" height="34" class="me-2">
+      Davide Salzano
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link " href="./research.html">Research</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="./publications.html">Publications</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./contacts.html">Contacts</a>
-        </li>
+
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link" href="./index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="./research.html">Research</a></li>
+        <li class="nav-item"><a class="nav-link active" href="./publications.html">Publications</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
-<main>
+<main class="content container">
+
+  <header class="page-head">
+    <h1>Publications</h1>
+    <p class="lead">Complete list of preprints, journal and conference papers. (Updated on January 2026)</p>
+  </header>
+
+  <!-- Preprints -->
+  <section class="section-block">
+    <h2 class="h4 text-white">Preprints</h2>
+    <div class="mt-3">
+
+      <div class="pub-card" data-inview>
+        <div><strong>G.C. Maffettone, <b>D. Salzano</b>, M. di Bernardo</strong></div>
+        <div class="mt-1"><a href="https://arxiv.org/abs/2602.09695" target="_blank" rel="noopener noreferrer">Robust Macroscopic Density Control of Heterogeneus Multi-Agent Systems</a> — submitted to IEEE Transactions on Automatic Control, 2026.</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>L. Catello, I. Napolitano, <b> D. Salzano, </b> M. di Bernardo</strong></div>
+        <div class="mt-1"><a href="https://arxiv.org/pdf/2511.21304" target="_blank" rel="noopener noreferrer">“Sparse shepherding control of large-scale multi-agent systems via Reinforcement Learning”</a> — submitted to the European Control Conference, 2026.</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>S. M. Brancato, <b>D. Salzano</b>, D. Fiore, F. De Lellis, G. Russo, M. di Bernardo</strong></div>
+        <div class="mt-1"><a href="https://www.biorxiv.org/content/10.1101/2025.05.05.652201v1.abstract" target="_blank" rel="noopener noreferrer">A bioreactor-based architecture for in vivo model-based and sim-to-real learning control of microbial consortium composition</a> — submitted to IEEE Transaction on Control Systems Technology, 2025.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Journal papers -->
+  <section class="section-block">
+    <h2 class="h4 text-white">Journal papers</h2>
 
 
+    <div class="mt-3">
+      <div class="year-header">2026</div>
 
-<div class="container-fluid my-5">
-  <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3">
-    <div class="col-lg-12 p-3 p-lg-5 pt-lg-3">
-      <h1 class="display-4 fw-bold lh-1 text-body-emphasis text-center">Publications list</h1>
+      <div class="pub-card" data-inview>
+        <div><strong>Campanile, G., Martinelli, V., <b>Salzano, D.</b>, & Fiore, D.</strong></div>
+        <div class="mt-1"><a href="https://www.sciencedirect.com/science/article/pii/S246860182600026X?via%3Dihub" target="_blank" rel="noopener noreferrer">Regulating population density through antithetic feedback control of cell growth</a>. IFAC Journal of Systems and Control, Volume 35, 100386, 2026.</div>
+      </div>
+
+
+      <div class="pub-card" data-inview>
+        <div><strong>Giusti, A., <b>Salzano, D.</b>, di Bernardo, M., & Gorochowski, T. E.</strong></div>
+        <div class="mt-1"><a href="https://royalsocietypublishing.org/rsif/article/23/234/20250780/479767/Data-driven-inference-of-digital-twins-for-high" target="_blank" rel="noopener noreferrer">Data-driven inference of digital twins for high-throughput phenotyping of motile and light-responsive microorganisms</a>. Journal of the Royal Society Interface 22, 20250780 (2026).</div>
+      </div>
+
+      <div class="year-header">2025</div>
+      <div class="pub-card" data-inview>
+        <div><strong>M. Coraggio, <b> D. Salzano, </b> M. di Bernardo</strong></div>
+        <div class="mt-1"><a href="https://www.sciencedirect.com/science/chapter/referencework/abs/pii/B9780443140815001677" target="_blank" rel="noopener noreferrer">“Controlling complex systems”</a>. Encyclopedia of Systems and Control Engineering, Springer (2025).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>Campanile, G., Martinelli, V., <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://www.sciencedirect.com/science/article/pii/S0947358025001517" target="_blank" rel="noopener noreferrer">In silico analysis of metabolic burden effects on a multicellular integral controller</a>. European Journal of Control (2025).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong><b>Salzano, D.</b>, Shannon, B., Grierson, C., Marucci, L., Savery, N. J., & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://pubs.acs.org/doi/full/10.1021/acssynbio.4c00862" target="_blank" rel="noopener noreferrer">In Vivo Multicellular Feedback Control in Synthetic Microbial Consortia</a>. ACS Synthetic Biology (2025).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>Martinelli, V., Fiore, D., <b>Salzano, D.</b>, & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://royalsocietypublishing.org/doi/full/10.1098/rsif.2024.0583" target="_blank" rel="noopener noreferrer">Multicellular PID control for robust regulation of biological processes</a>. Journal of the Royal Society Interface, 22 (2025).</div>
+      </div>
+
+      <div class="year-header">2024</div>
+      <div class="pub-card" data-inview>
+        <div><strong>Brancato, S. M., <b>Salzano, D.</b>, Fiore, D., Russo, G., & Di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://ieeexplore.ieee.org/abstract/document/10547001" target="_blank" rel="noopener noreferrer">Ratiometric control of two microbial populations via a dual chamber bioreactor</a>. IEEE Control Systems Letters, 8, 1301-1306 (2024).</div>
+      </div>
+
+      <div class="year-header">2023</div>
+      <div class="pub-card" data-inview>
+        <div><strong>Martinelli, V., <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://ieeexplore.ieee.org/abstract/document/10155307" target="_blank" rel="noopener noreferrer">Multicellular PD control in microbial consortia</a>. IEEE Control Systems Letters, 7, 2641-2646 (2023).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>Fusco, V., <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/rnc.5982" target="_blank" rel="noopener noreferrer">Embedded control of cell growth using tunable genetic systems</a>. International Journal of Robust and Nonlinear Control, 33(9), 4893-4907 (2023).</div>
+      </div>
+
+      <div class="year-header">2022</div>
+      <div class="pub-card" data-inview>
+        <div><strong><b>Salzano, D.</b>, Fiore, D., & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022.0335" target="_blank" rel="noopener noreferrer">Ratiometric control of cell phenotypes in monostrain microbial consortia</a>. Journal of the Royal Society Interface, 19(192), 20220335 (2022).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>de Cesare, I., <b>Salzano, D.</b>, di Bernardo, M., Renson, L., & Marucci, L.</strong></div>
+        <div class="mt-1"><a href="https://pubs.acs.org/doi/full/10.1021/acssynbio.1c00632" target="_blank" rel="noopener noreferrer">Control-based continuation: a new approach to prototype synthetic gene networks</a>. ACS Synthetic Biology, 11(7), 2300-2313 (2022).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>Martinelli, V., <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://ieeexplore.ieee.org/abstract/document/9802643" target="_blank" rel="noopener noreferrer">Multicellular PI control for gene regulation in microbial consortia</a>. IEEE Control Systems Letters, 6, 3373-3378 (2022).</div>
+      </div>
+
+      <div class="year-header">2021</div>
+      <div class="pub-card" data-inview>
+        <div><strong>Ruolo, I., Napolitano, S., <b>Salzano, D.</b>, di Bernardo, M., & di Bernardo, D.</strong></div>
+        <div class="mt-1"><a href="https://www.sciencedirect.com/science/article/pii/S2452310021000925" target="_blank" rel="noopener noreferrer">Control engineering meets synthetic biology: Foundations and applications</a>. Current Opinion in Systems Biology, 28, 100397 (2021).</div>
+      </div>
+
+      <div class="year-header">2020</div>
+      <div class="pub-card" data-inview>
+        <div><strong>Della Rossa, F., <b>Salzano, D.</b>, Di Meglio, A., De Lellis, F., Coraggio, M., Calabrese, C., ... & Di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://www.nature.com/articles/s41467-020-18827-5" target="_blank" rel="noopener noreferrer">A network model of Italy shows that intermittent regional strategies can alleviate the COVID-19 epidemic</a>. Nature Communications, 11(1), 5106 (2020).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>Shannon, B., Zamora-Chimal, C. G., Postiglione, L., <b>Salzano, D.</b>, Grierson, C. S., Marucci, L., ... & Di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://pubs.acs.org/doi/full/10.1021/acssynbio.0c00105" target="_blank" rel="noopener noreferrer">In vivo feedback control of an antithetic molecular-titration motif in Escherichia coli using microfluidics</a>. ACS Synthetic Biology, 9(10), 2617-2624 (2020).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>Fiore, D., <b>Salzano, D.</b>, Cristòbal-Cóppulo, E., Olm, J. M., & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://ieeexplore.ieee.org/abstract/document/9112230" target="_blank" rel="noopener noreferrer">Multicellular feedback control of a genetic toggle-switch in microbial consortia</a>. IEEE Control Systems Letters, 5(1), 151-156 (2020).</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>Guarino, A., Fiore, D., <b>Salzano, D.</b>, & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://pubs.acs.org/doi/full/10.1021/acssynbio.9b00464" target="_blank" rel="noopener noreferrer">Balancing cell populations endowed with a synthetic toggle switch via adaptive pulsatile feedback control</a>. ACS Synthetic Biology, 9(4), 793-803 (2020).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conference papers -->
+  <section class="section-block">
+    <h2 class="h4 text-white">Conference Papers</h2>
+    <div class="mt-3">
+      <div class="year-header">2025</div>
+      <div class="pub-card" data-inview>
+        <div><strong>Martinelli, V., Fiore, <b>Salzano, D.</b>, & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://ieeexplore.ieee.org/document/11073470" target="_blank" rel="noopener noreferrer">Root Contours Guided Design of a Multicellular PID Controller</a>. 2025 33rd Mediterranean Conference on Control and Automation (MED), Tangier (2025).</div>
+      </div>
+
+      <div class="year-header">2024</div>
+      <div class="pub-card" data-inview>
+        <div><strong>Brancato, S. M., De Lellis, F., <b>Salzano, D.</b>, Russo, G., & Di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://proceedings.mlr.press/v242/brancato24a.html" target="_blank" rel="noopener noreferrer">In vivo learning-based control of microbial populations density in bioreactors</a>. Learning for Dynamics & Control Conference (L4DC), 2024.</div>
+      </div>
+
+      <div class="year-header">2023</div>
+      <div class="pub-card" data-inview>
+        <div><strong>Karagiannis-Axypolitidis, N., <b>Salzano, D.</b>, Fiore, D., Cartenì, F., Mazzoleni, S., Di Bernardo, M., & Giannino, F.</strong></div>
+        <div class="mt-1"><a href="https://ieeexplore.ieee.org/abstract/document/10178353" target="_blank" rel="noopener noreferrer">A periodic open-loop strategy to mitigate plant-soil negative feedback</a>. European Control Conference (ECC), 2023.</div>
+      </div>
+
+      <div class="pub-card" data-inview>
+        <div><strong>Brancato, S. M., De Lellis, F., <b>Salzano, D.</b>, Russo, G., & Di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://ieeexplore.ieee.org/abstract/document/10178155" target="_blank" rel="noopener noreferrer">External control of a genetic toggle switch via Reinforcement Learning</a>. European Control Conference (ECC), 2023.</div>
+      </div>
+
+      <div class="year-header">2019</div>
+      <div class="pub-card" data-inview>
+        <div><strong><b>Salzano, D.</b>, Fiore, D., & di Bernardo, M.</strong></div>
+        <div class="mt-1"><a href="https://ieeexplore.ieee.org/abstract/document/9029592" target="_blank" rel="noopener noreferrer">Ratiometric control for differentiation of cell populations endowed with synthetic toggle switches</a>. 2019 IEEE 58th Conference on Decision and Control (CDC).</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mt-4"></div>
+
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <div class="mb-3 mb-md-0">
+      <strong>Email:</strong> <a href="mailto:davide.salzano@unina.it">davide.salzano@unina.it</a>
+    </div>
+    <div>
+      <a class="me-3" href="https://scholar.google.com/citations?user=1Epzj84AAAAJ&hl=it&oi=ao" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar">
+        <img src="Google_Scholar_logo.png" alt="Google Scholar" width="26" height="26">
+      </a>
+      <a class="me-3 text-muted" href="https://www.linkedin.com/in/davide-salzano/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="bi bi-linkedin fs-5"></i></a>
+      <a class="text-muted" href="https://x.com/DavideSalzano94" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="bi bi-twitter fs-5"></i></a>
     </div>
   </div>
-  <div class="row p-4 pb-0 pe-lg-0 pt-lg-1 align-items-center rounded-3">
+</footer>
 
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
-    <div class="col-lg-12 p-3 p-lg-5 pt-lg-3">
-      <h2 class="display-5 fw-bold lh-1 text-body-emphasis">Preprints</h2>
-      <br/>
-      <ul>
-        <li class="lead">L. Catello, I. Napolitano, <b> D. Salzano, </b> M. di Bernardo, <a href="https://arxiv.org/pdf/2511.21304">“Sparse shepherding control of large-scale multi-agent systems via Reinforcement Learning”</a>, submitted to the European Control Conference, 2026.</li>
-        <li class="lead">S. M. Brancato, <b>D. Salzano</b>, D. Fiore, F. De Lellis, G. Russo, M. di Bernardo. <a href="https://www.biorxiv.org/content/10.1101/2025.05.05.652201v1.abstract">A bioreactor-based architecture for in vivo model-based and sim-to-real learning control of microbial consortium composition</a>, submitted to IEEE Transaction on Control Systems Technology, 2025.</li>    
-        <li class="lead">Campanile, G., Martinelli, V., <b>Salzano, D.</b>, & Fiore, D. (2025). <a href="https://www.biorxiv.org/content/10.1101/2025.04.16.648696v1.abstract">Regulating population density through antithetic feedback control of cell growth.</a> bioRxiv, 2025-04.</li>
-      </ul>
-    </div>
+<!-- Scroll-reveal only -->
+<script>
+/* simple scroll reveal for elements with data-inview */
+(function(){
+  const items = document.querySelectorAll('[data-inview]');
+  if (!items.length) return;
+  const obs = new IntersectionObserver((entries, o) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('inview');
+        o.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  items.forEach(it => obs.observe(it));
+})();
 
-
-    <div class="col-lg-12 p-3 p-lg-5 pt-lg-3">
-      <h2 class="display-5 fw-bold lh-1 text-body-emphasis">Journal papers</h2>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2026</h3>
-      <br/>
-      <ul>
-        <li class="lead">Giusti, A., <b>Salzano, D.</b>, di Bernardo, M., & Gorochowski, T. E. (2025). <a href="https://royalsocietypublishing.org/rsif/article/23/234/20250780/479767/Data-driven-inference-of-digital-twins-for-high">Data-driven inference of digital twins for high-throughput phenotyping of motile and light-responsive microorganisms.</a> Journal of the Royal Society Interface 22, 20250780, 2026.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2025</h3>
-      <br/>
-      <ul>
-        <li class="lead">M. Coraggio, <b> D. Salzano, </b> M. di Bernardo, <a href="https://www.sciencedirect.com/science/chapter/referencework/abs/pii/B9780443140815001677">“Controlling complex systems”</a>, Encyclopedia chapter in Encyclopedia of Systems and Control Engineering, Springer, 2025.</li>
-        <li class="lead">Campanile, G., Martinelli, V., <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M. (2025). <a href="https://www.sciencedirect.com/science/article/pii/S0947358025001517">In silico analysis of metabolic burden effects on a multicellular integral controller.</a> European Journal of Control, 101322.</li>
-        <li class="lead"><b>Salzano, D.</b>, Shannon, B., Grierson, C., Marucci, L., Savery, N. J., & di Bernardo, M. (2025). <a href="https://pubs.acs.org/doi/full/10.1021/acssynbio.4c00862">In Vivo Multicellular Feedback Control in Synthetic Microbial Consortia.</a> ACS Synthetic Biology.</li>
-        <li class="lead">Martinelli, V., Fiore, D., <b>Salzano, D.</b>, & di Bernardo, M. (2025). <a href="https://royalsocietypublishing.org/doi/full/10.1098/rsif.2024.0583">Multicellular PID control for robust regulation of biological processes.</a> Journal of the Royal Society Interface, 22(222), 20240583.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2024</h3>
-      <br/>
-      <ul>
-        <li class="lead">Brancato, S. M., <b>Salzano, D.</b>, Fiore, D., Russo, G., & Di Bernardo, M. (2024). <a href="https://ieeexplore.ieee.org/abstract/document/10547001">Ratiometric control of two microbial populations via a dual chamber bioreactor.</a> IEEE Control Systems Letters, 8, 1301-1306.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2023</h3>
-      <br/>
-      <ul>
-        <li class="lead">Martinelli, V., <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M. (2023). <a href="https://ieeexplore.ieee.org/abstract/document/10155307">Multicellular PD control in microbial consortia. </a> IEEE Control Systems Letters, 7, 2641-2646.</li>
-        <li class="lead">Fusco, V., <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M. (2023). <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/rnc.5982">Embedded control of cell growth using tunable genetic systems. </a> International Journal of Robust and Nonlinear Control, 33(9), 4893-4907.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2022</h3>
-      <br/>
-      <ul>
-        <li class="lead"> <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M. (2022). <a href="https://royalsocietypublishing.org/doi/full/10.1098/rsif.2022.0335">Ratiometric control of cell phenotypes in monostrain microbial consortia.</a> Journal of the Royal Society Interface, 19(192), 20220335.</li>
-        <li class="lead">de Cesare, I., <b>Salzano, D.</b>, di Bernardo, M., Renson, L., & Marucci, L. (2022). <a href="https://pubs.acs.org/doi/full/10.1021/acssynbio.1c00632">Control-based continuation: a new approach to prototype synthetic gene networks.</a> ACS synthetic biology, 11(7), 2300-2313.</li>
-        <li class="lead">Martinelli, V., <b>Salzano, D.</b>, Fiore, D., & di Bernardo, M. (2022). <a href="https://ieeexplore.ieee.org/abstract/document/9802643">Multicellular PI control for gene regulation in microbial consortia.</a> IEEE Control Systems Letters, 6, 3373-3378.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2021</h3>
-      <br/>
-      <ul>
-        <li class="lead"> Ruolo, I., Napolitano, S., <b>Salzano, D.</b>, di Bernardo, M., & di Bernardo, D. (2021). <a href="https://www.sciencedirect.com/science/article/pii/S2452310021000925">Control engineering meets synthetic biology: Foundations and applications.</a> Current Opinion in Systems Biology, 28, 100397.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2020</h3>
-      <br/>
-      <ul>
-        <li class="lead"> Della Rossa, F., <b>Salzano, D.</b>, Di Meglio, A., De Lellis, F., Coraggio, M., Calabrese, C., ... & Di Bernardo, M. (2020). <a href="https://www.nature.com/articles/s41467-020-18827-5">A network model of Italy shows that intermittent regional strategies can alleviate the COVID-19 epidemic.</a> Nature communications, 11(1), 5106.</li>
-        <li class="lead"> Shannon, B., Zamora-Chimal, C. G., Postiglione, L., <b>Salzano, D.</b>, Grierson, C. S., Marucci, L., ... & Di Bernardo, M. (2020). <a href="https://pubs.acs.org/doi/full/10.1021/acssynbio.0c00105">In vivo feedback control of an antithetic molecular-titration motif in escherichia coli using microfluidics.</a> ACS Synthetic Biology, 9(10), 2617-2624.</li>
-        <li class="lead"> Fiore, D., <b>Salzano, D.</b>, Cristòbal-Cóppulo, E., Olm, J. M., & di Bernardo, M. (2020).  <a href="https://ieeexplore.ieee.org/abstract/document/9112230">Multicellular feedback control of a genetic toggle-switch in microbial consortia. </a> IEEE Control Systems Letters, 5(1), 151-156.</li>
-        <li class="lead"> Guarino, A., Fiore, D., <b>Salzano, D.</b>, & di Bernardo, M. (2020). <a href="https://pubs.acs.org/doi/full/10.1021/acssynbio.9b00464">Balancing cell populations endowed with a synthetic toggle switch via adaptive pulsatile feedback control. </a> ACS synthetic biology, 9(4), 793-803.</li>
-      </ul>
-
-
-    </div>
-    <div class="col-lg-12 p-3 p-lg-5 pt-lg-3">
-      <h2 class="display-5 fw-bold lh-1 text-body-emphasis">Conference Papers</h2>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2025</h3>
-      <br/>
-      <ul>
-        <li class="lead">Martinelli, V., Fiore, <b> Salzano, D. </b>, & di Bernardo, M. (2025). <a href="https://ieeexplore.ieee.org/document/11073470">Root Contours Guided Design of a Multicellular PID Controller.</a> 2025 33rd Mediterranean Conference on Control and Automation (MED), Tangier, Morocco, 2025, pp. 138-143.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2024</h3>
-      <br/>
-      <ul>
-        <li class="lead">Brancato, S. M., <b>Salzano, D.</b>, De Lellis, F., Fiore, D., Russo, G., & di Bernardo, M. (2024, June). <a href="https://proceedings.mlr.press/v242/brancato24a.html">In vivo learning-based control of microbial populations density in bioreactors.</a> In 6th Annual Learning for Dynamics & Control Conference (pp. 941-953). PMLR.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2023</h3>
-      <br/>
-      <ul>
-        <li class="lead">Karagiannis-Axypolitidis, N., <b>Salzano, D.</b>, Fiore, D., Cartenì, F., Mazzoleni, S., Di Bernardo, M., & Giannino, F. (2023, June). <a href="https://ieeexplore.ieee.org/abstract/document/10178353">A periodic open-loop strategy to mitigate plant-soil negative feedback. </a> In 2023 European Control Conference (ECC) (pp. 1-6). IEEE.</li>
-        <li class="lead">Brancato, S. M., De Lellis, F., <b>Salzano, D.</b>, Russo, G., & Di Bernardo, M. (2023, June). <a href="https://ieeexplore.ieee.org/abstract/document/10178155">External control of a genetic toggle switch via Reinforcement Learning.</a> 2023 European Control Conference (ECC) (pp. 1-6). IEEE.</li>
-      </ul>
-      <br/>
-      <br/>
-      <h3 class="display-10 fw-bold lh-1 text-body-emphasis">2019</h3>
-      <br/>
-      <ul>
-        <li class="lead"> <b> Salzano, D.</b>, Fiore, D., & di Bernardo, M. (2019, December). <a href="https://ieeexplore.ieee.org/abstract/document/9029592">Ratiometric control for differentiation of cell populations endowed with synthetic toggle switches.</a> In 2019 IEEE 58th Conference on Decision and Control (CDC) (pp. 927-932). IEEE.</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-
-
-<div class="mt-5"></div>
-
-<div class="mt-5"></div>
-
-
-
-
-
-
-<div class="container">
-  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-    <div class="col-md-4 d-flex align-items-center">
-      <p class="lead"> <b>Email:</b> <a href="mailto:davide.salzano@unina.it">davide.salzano@unina.it</a></p>
-    </div>
-    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-      <li class="ms-3">
-        <a class="text-body-secondary" href="https://scholar.google.com/citations?user=1Epzj84AAAAJ&hl=it&oi=ao" aria-label="Google Scholar" target="_blank">
-          <img src="Google_Scholar_logo.png" alt="Google Scholar" width="25" height="25">
-        </a>
-      </li>
-      <li class="ms-3">
-        <a class="text-body-secondary" href="https://www.linkedin.com/in/davide-salzano/" aria-label="LinkedIn" target="_blank">
-          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25 " fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
-            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
-          </svg>
-        </a>
-      </li>
-      <li class="ms-3">
-        <a class="text-body-secondary" href="https://x.com/DavideSalzano94" aria-label="X" target="_blank">
-          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
-            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
-          </svg>
-        </a>
-      </li>
-    </ul>
-  </footer>
-</div>
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+/* reduced motion fallback */
+(function(){
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mq.matches){
+    document.querySelectorAll('.pub-card').forEach(el => { el.style.transition = 'none'; el.classList.add('inview'); });
+  }
+})();
+</script>
 </body>
 </html>
